@@ -283,7 +283,7 @@ class SavePeftModelCallback(transformers.TrainerCallback):
 def get_accelerate_model(args, checkpoint_dir):
 
     if torch.cuda.is_available():
-        n_gpus = torch.cuda.device_count()
+        n_gpus = torch.cuda()
     if is_ipex_available() and torch.xpu.is_available():
         n_gpus = torch.xpu.device_count()
         
@@ -302,6 +302,7 @@ def get_accelerate_model(args, checkpoint_dir):
 
     print(f'loading base model {args.model_name_or_path}...')
     compute_dtype = (torch.float16 if args.fp16 else (torch.bfloat16 if args.bf16 else torch.float32))
+
     model = AutoModelForCausalLM.from_pretrained(
         args.model_name_or_path,
         cache_dir=args.cache_dir,
