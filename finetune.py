@@ -22,10 +22,7 @@ accelerator = Accelerator(fsdp_plugin=fsdp_plugin)
 
 
 ## load the dataset
-train_dataset = load_dataset('kye/metamath-mistal-tokenized-16384') #split='train')
-eval_dataset = load_dataset('kye/metamath-mistal-tokenized-16384')#split='validation')
-test_dataset = load_dataset('kye/metamath-mistal-tokenized-16384')#split='test')
-
+train_dataset = load_dataset('kye/metamath-mistal-tokenized-16384', split='train') #split='train')
 
 base_model_id = "mistralai/Mistral-7B-Instruct-v0.1"
 # bnb_config = BitsAndBytesConfig(
