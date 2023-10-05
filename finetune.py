@@ -11,7 +11,7 @@ from torch.distributed.fsdp.fully_sharded_data_parallel import (
     FullOptimStateDictConfig,
     FullStateDictConfig,
 )
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer #BitsAndBytesConfig
 
 fsdp_plugin = FullyShardedDataParallelPlugin(
     state_dict_config=FullStateDictConfig(offload_to_cpu=True, rank0_only=False),
@@ -28,14 +28,14 @@ test_dataset = load_dataset('kye/metamath-mistal-tokenized-16384')#split='test')
 
 
 base_model_id = "mistralai/Mistral-7B-Instruct-v0.1"
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16
-)
+# bnb_config = BitsAndBytesConfig(
+#     load_in_4bit=True,
+#     bnb_4bit_use_double_quant=True,
+#     bnb_4bit_quant_type="nf4",
+#     bnb_4bit_compute_dtype=torch.bfloat16
+# )
 
-model = AutoModelForCausalLM.from_pretrained(base_model_id, quantization_config=bnb_config)
+model = AutoModelForCausalLM.from_pretrained(base_model_id, )#quantization_config=bnb_config)
 
 tokenizer = AutoTokenizer.from_pretrained(
     base_model_id,
