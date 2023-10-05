@@ -1,14 +1,20 @@
 [![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
 
 # Quasar
-![Quasar](/quasar.jpeg)
 Quasar: Mistral, mastering mathematical reasoning.
+![Quasar](/quasar.jpeg)
 
-# Install
+## Features:
+- Mistral7b finetuned on high quality tokens for stellar mathematical reasoning.
+- Mistral7b extended to 16k seq and soon 32k and then 65k!
+- High Quality reasoning for all reasoning intensive tasks.
 
-# Usage
+## Architecture
 
 
-# License
+## Install
+
+## Usage
+
+## License
 MIT
-
