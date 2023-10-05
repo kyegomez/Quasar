@@ -282,10 +282,12 @@ class SavePeftModelCallback(transformers.TrainerCallback):
 
 def get_accelerate_model(args, checkpoint_dir):
 
-    if torch.cuda.is_available():
-        n_gpus = torch.cuda()
-    if is_ipex_available() and torch.xpu.is_available():
-        n_gpus = torch.xpu.device_count()
+    # if torch.cuda.is_available():
+    #     n_gpus = torch.cuda()
+    # if is_ipex_available() and torch.xpu.is_available():
+    #     n_gpus = torch.xpu.device_count()
+
+    n_gpus = torch.cuda.device_count() if torch.cuda.is_available() else 1
         
     max_memory = f'{args.max_memory_MB}MB'
     max_memory = {i: max_memory for i in range(n_gpus)}
