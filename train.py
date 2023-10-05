@@ -1,6 +1,3 @@
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
-
 import argparse
 import copy
 import importlib
@@ -8,6 +5,7 @@ import json
 import logging
 import os
 import sys
+import warnings
 from collections import defaultdict
 from dataclasses import dataclass, field
 from os.path import exists, isdir, join
@@ -35,7 +33,6 @@ from transformers import (
     set_seed,
 )
 from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
-import warnings
 
 
 def is_ipex_available():
@@ -587,6 +584,8 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
             return load_dataset("timdettmers/openassistant-guanaco")
         elif dataset_name == 'vicuna':
             raise NotImplementedError("Vicuna data was not released.")
+        elif dataset_name == "math":
+            return load_dataset("kye/metamath-mistal-tokenized-16384")
         else:
             if os.path.exists(dataset_name):
                 try:
