@@ -11,7 +11,7 @@ from torch.distributed.fsdp.fully_sharded_data_parallel import (
     FullOptimStateDictConfig,
     FullStateDictConfig,
 )
-from transformers import AutoModelForCausalLM, AutoTokenizer #BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer  #BitsAndBytesConfig
 
 fsdp_plugin = FullyShardedDataParallelPlugin(
     state_dict_config=FullStateDictConfig(offload_to_cpu=True, rank0_only=False),
@@ -56,21 +56,21 @@ def tokenize(prompt):
     result["labels"] = result["input_ids"].copy()
     return result
 
-def generate_and_tokenize_prompt(data_point):
-    full_prompt =f"""Given a target sentence construct the underlying meaning representation of the input sentence as a single function with attributes and attribute values.
-    This function should describe the target string accurately and the function must be one of the following ['inform', 'request', 'give_opinion', 'confirm', 'verify_attribute', 'suggest', 'request_explanation', 'recommend', 'request_attribute'].
-    The attributes must be one of the following: ['name', 'exp_release_date', 'release_year', 'developer', 'esrb', 'rating', 'genres', 'player_perspective', 'has_multiplayer', 'platforms', 'available_on_steam', 'has_linux_release', 'has_mac_release', 'specifier']
+# def generate_and_tokenize_prompt(data_point):
+#     full_prompt =f"""Given a target sentence construct the underlying meaning representation of the input sentence as a single function with attributes and attribute values.
+#     This function should describe the target string accurately and the function must be one of the following ['inform', 'request', 'give_opinion', 'confirm', 'verify_attribute', 'suggest', 'request_explanation', 'recommend', 'request_attribute'].
+#     The attributes must be one of the following: ['name', 'exp_release_date', 'release_year', 'developer', 'esrb', 'rating', 'genres', 'player_perspective', 'has_multiplayer', 'platforms', 'available_on_steam', 'has_linux_release', 'has_mac_release', 'specifier']
 
-    ### Target sentence:
-    {data_point["target"]}
+#     ### Target sentence:
+#     {data_point["target"]}
 
-    ### Meaning representation:
-    {data_point["meaning_representation"]}
-    """
-    return tokenize(full_prompt)
+#     ### Meaning representation:
+#     {data_point["meaning_representation"]}
+#     """
+#     return tokenize(full_prompt)
 
-tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
-tokenized_val_dataset = eval_dataset.map(generate_and_tokenize_prompt)
+# tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
+# tokenized_val_dataset = eval_dataset.map(generate_and_tokenize_prompt)
 
 
 model.gradient_checkpointing_enable()
