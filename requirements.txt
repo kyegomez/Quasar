@@ -1,0 +1,17 @@
+accelerate
+datasets
+evaluate
+torch
+transformers
+tqdm
+einops
+sentencepiece
+protobuf==3.19.6
+scikit-learn
+matplotlib
+pandas
+numpy
+wandb
+deepspeed
+peft
+bitsandbytes
