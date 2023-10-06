@@ -182,7 +182,7 @@ class TrainingArguments(transformers.Seq2SeqTrainingArguments):
         metadata={"help": "Free memory per gpu."}
     )
     report_to: str = field(
-        default='none',
+        default='wandb',
         metadata={"help": "To use wandb or something else for reporting."}
     )
     output_dir: str = field(default='./output', metadata={"help": 'The output dir for logs and checkpoints'})

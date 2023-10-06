@@ -1,5 +1,5 @@
 resources:
-  accelerators: V100:4  # 1x NVIDIA V100 GPU
+  accelerators: T4:4  # 1x NVIDIA V100 GPU
 
 num_nodes: 1  # Number of VMs to launch
 
