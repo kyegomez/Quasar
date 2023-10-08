@@ -11,18 +11,22 @@ from torch.distributed.fsdp.fully_sharded_data_parallel import (
     FullOptimStateDictConfig,
     FullStateDictConfig,
 )
-from transformers import AutoModelForCausalLM, AutoTokenizer  #BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer  # BitsAndBytesConfig
 
 fsdp_plugin = FullyShardedDataParallelPlugin(
     state_dict_config=FullStateDictConfig(offload_to_cpu=True, rank0_only=False),
-    optim_state_dict_config=FullOptimStateDictConfig(offload_to_cpu=True, rank0_only=False),
+    optim_state_dict_config=FullOptimStateDictConfig(
+        offload_to_cpu=True, rank0_only=False
+    ),
 )
 
 accelerator = Accelerator(fsdp_plugin=fsdp_plugin)
 
 
 ## load the dataset
-train_dataset = load_dataset('kye/metamath-mistal-tokenized-16384', split='train') #split='train')
+train_dataset = load_dataset(
+    "kye/metamath-mistal-tokenized-16384", split="train"
+)  # split='train')
 
 base_model_id = "mistralai/Mistral-7B-Instruct-v0.1"
 # bnb_config = BitsAndBytesConfig(
@@ -32,16 +36,16 @@ base_model_id = "mistralai/Mistral-7B-Instruct-v0.1"
 #     bnb_4bit_compute_dtype=torch.bfloat16
 # )
 
-model = AutoModelForCausalLM.from_pretrained(base_model_id, )#quantization_config=bnb_config)
+model = AutoModelForCausalLM.from_pretrained(
+    base_model_id,
+)  # quantization_config=bnb_config)
 
 tokenizer = AutoTokenizer.from_pretrained(
-    base_model_id,
-    model_max_length=8192,
-    padding_side="left",
-    add_eos_token=True
+    base_model_id, model_max_length=8192, padding_side="left", add_eos_token=True
 )
 
 tokenizer.pad_token = tokenizer.eos_token
+
 
 def tokenize(prompt):
     result = tokenizer(
@@ -52,6 +56,7 @@ def tokenize(prompt):
     )
     result["labels"] = result["input_ids"].copy()
     return result
+
 
 # def generate_and_tokenize_prompt(data_point):
 #     full_prompt =f"""Given a target sentence construct the underlying meaning representation of the input sentence as a single function with attributes and attribute values.
@@ -72,6 +77,8 @@ def tokenize(prompt):
 
 model.gradient_checkpointing_enable()
 model = prepare_model_for_kbit_training(model)
+
+
 def print_trainable_parameters(model):
     """
     Prints the number of trainable parameters in the model.
@@ -85,7 +92,6 @@ def print_trainable_parameters(model):
     print(
         f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param}"
     )
-
 
 
 config = LoraConfig(
@@ -120,7 +126,7 @@ if len(wandb_project) > 0:
     os.environ["WANDB_PROJECT"] = wandb_project
 
 
-if torch.cuda.device_count() > 1: # If more than 1 GPU
+if torch.cuda.device_count() > 1:  # If more than 1 GPU
     model.is_parallelizable = True
     model.model_parallel = True
 
@@ -140,18 +146,18 @@ trainer = transformers.Trainer(
         per_device_train_batch_size=2,
         gradient_accumulation_steps=4,
         max_steps=1000,
-        learning_rate=2.5e-5, # Want about 10x smaller than the Mistral learning rate
+        learning_rate=2.5e-5,  # Want about 10x smaller than the Mistral learning rate
         logging_steps=50,
         bf16=True,
         optim="paged_adamw_8bit",
-        logging_dir="./logs",        # Directory for storing logs
-        save_strategy="steps",       # Save the model checkpoint every logging step
-        save_steps=50,                # Save checkpoints every 50 steps
-        evaluation_strategy="steps", # Evaluate the model every logging step
-        eval_steps=50,               # Evaluate and save checkpoints every 50 steps
-        do_eval=True,                # Perform evaluation at the end of training
-        report_to="wandb",           # Comment this out if you don't want to use weights & baises
-        run_name=f"{run_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
+        logging_dir="./logs",  # Directory for storing logs
+        save_strategy="steps",  # Save the model checkpoint every logging step
+        save_steps=50,  # Save checkpoints every 50 steps
+        evaluation_strategy="steps",  # Evaluate the model every logging step
+        eval_steps=50,  # Evaluate and save checkpoints every 50 steps
+        do_eval=True,  # Perform evaluation at the end of training
+        report_to="wandb",  # Comment this out if you don't want to use weights & baises
+        run_name=f"{run_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}",  # Name of the W&B run (optional)
     ),
     data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
 )
