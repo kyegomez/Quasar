@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "quasar"
-version = "0.0.1"
+version = "0.0.2"
 description = "quasar - Pytorch"
 license = "MIT"
 authors = ["Kye Gomez <kye@apac.ai>"]
@@ -23,6 +23,24 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
+accelerate = "*"
+datasets = "*"
+evaluate = "*"
+torch = "*"
+transformers = "*"
+tqdm = "*"
+einops = "*"
+sentencepiece = "*"
+protobuf==3.19.6
+scikit-learn = "*"
+matplotlib = "*"
+pandas = "*"
+numpy = "*"
+wandb = "*"
+deepspeed = "*"
+peft = "*"
+bitsandbytes = "*"
+trl = "*"
 
 
 [tool.poetry.dev-dependencies]
