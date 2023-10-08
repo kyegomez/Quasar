@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "quasar"
+name = "quasarx"
 version = "0.0.2"
 description = "quasar - Pytorch"
 license = "MIT"
@@ -20,6 +20,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.6"
 ]
+packages = [
+    { include = "quasar" },
+    { include = "quasar/**/*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -31,7 +35,7 @@ transformers = "*"
 tqdm = "*"
 einops = "*"
 sentencepiece = "*"
-protobuf==3.19.6
+protobuf = "*"
 scikit-learn = "*"
 matplotlib = "*"
 pandas = "*"
