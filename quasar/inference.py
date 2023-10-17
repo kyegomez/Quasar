@@ -1,15 +1,10 @@
 import time
 
-import torch  # , json, os, sys
+import torch
 from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    LlamaForCausalLM,
     LlamaTokenizer,
     MistralForCausalLM,
 )
-
-# import bitsandbytes
 
 tokenizer = LlamaTokenizer.from_pretrained(
     "./collectivecognition-run6", trust_remote_code=True

@@ -4,9 +4,7 @@ import importlib
 import json
 import logging
 import os
-import sys
 import warnings
-from collections import defaultdict
 from dataclasses import dataclass, field
 from os.path import exists, isdir, join
 from typing import Dict, Optional, Sequence
@@ -19,7 +17,6 @@ import torch
 import transformers
 from datasets import Dataset, load_dataset
 from packaging import version
-from packaging.version import parse
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 from peft.tuners.lora import LoraLayer
 from torch.nn.utils.rnn import pad_sequence
@@ -461,7 +458,7 @@ def get_accelerate_model(args, checkpoint_dir):
                 model, join(checkpoint_dir, "adapter_model"), is_trainable=True
             )
         else:
-            print(f"adding LoRA modules...")
+            print("adding LoRA modules...")
             modules = find_all_linear_names(args, model)
             config = LoraConfig(
                 r=args.lora_r,
