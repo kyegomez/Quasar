@@ -1,20 +1,31 @@
-[![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
+# 🌌 Quasar: Mistral 🌌
 
-# Quasar
-Quasar: Mistral, mastering mathematical reasoning.
-![Quasar](/quasar.jpeg)
+[![Journey Through the Stars](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
 
-## Features:
-- Mistral7b finetuned on high quality tokens for stellar mathematical reasoning.
-- Mistral7b extended to 16k seq and soon 32k and then 65k!
-- High Quality reasoning for all reasoning intensive tasks.
+![Quasar - The brilliance of mathematical reasoning](/quasar.jpeg)
 
-## Architecture
+**Quasar**: Navigating the nebulae of numbers and equations with Mistral, the celestial entity mastering mathematical reasoning.
 
+## ✨ Features:
 
-## Install
+- 🪐 **Stellar Finetuning**: Mistral7b, evolved in the depths of space, finetuned on high-quality tokens for unmatched mathematical reasoning.
+  
+- 🌠 **Expanding Horizons**: Mistral7b currently extending its sequence to 16k. Brace yourself for an expansion to 32k and subsequently 65k!
 
-## Usage
+- 🚀 **Intensive Tasks? No Problem!**: Superior reasoning capabilities to tackle all your reasoning-intensive challenges.
 
-## License
-MIT
+## 🛸 Architecture
+
+(Add details about the architecture here.)
+
+## 🌠 Install
+
+(Provide the installation instructions here.)
+
+## 🚀 Usage
+
+(Share how users can utilize Quasar here.)
+
+## 📜 License
+
+Licensed under the MIT License. Traverse the realms of mathematical reasoning freely, but with responsibility!
