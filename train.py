@@ -60,7 +60,7 @@ from transformers import (
     TrainingArguments,
     pipeline,
     logging,
-    LlamaTokenizerFast
+    LlamaTokenizerFast,
 )
 from peft import LoraConfig, PeftModel, get_peft_model
 from trl import SFTTrainer
@@ -75,14 +75,14 @@ local_rank = -1
 per_device_train_batch_size = 4
 per_device_eval_batch_size = 1
 gradient_accumulation_steps = 4
-learning_rate = 2e-4 #I prefer a high lr for analytical llm, but to each its own
+learning_rate = 2e-4  # I prefer a high lr for analytical llm, but to each its own
 max_grad_norm = 0.3
 weight_decay = 0.001
 lora_alpha = 16
 lora_dropout = 0.1
 lora_r = 64
 group_by_length = True
-max_seq_length = 1024 #Enough for the default text size.
+max_seq_length = 1024  # Enough for the default text size.
 
 # The name of Mistral model
 model_name = "mistral-7b-v0.1"
@@ -170,13 +170,13 @@ if compute_dtype == torch.float16 and use_4bit:
     major, _ = torch.cuda.get_device_capability()
     if major >= 8:
         print("=" * 80)
-        print("Your GPU supports bfloat16, you can accelerate training with the argument --bf16")
+        print(
+            "Your GPU supports bfloat16, you can accelerate training with the argument --bf16"
+        )
         print("=" * 80)
 
 model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    device_map=device_map,
-    quantization_config=bnb_config
+    model_name, device_map=device_map, quantization_config=bnb_config
 )
 
 model.config.use_cache = False
@@ -193,11 +193,11 @@ peft_config = LoraConfig(
     r=lora_r,
     inference_mode=False,
     task_type="CAUSAL_LM",
-    target_modules = ["q_proj", "v_proj"]
+    target_modules=["q_proj", "v_proj"],
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_name, add_eos_token=True)
-#tokenizer = LlamaTokenizerFast.from_pretrained(model_name, add_eos_token=True, from_slow=True)
+# tokenizer = LlamaTokenizerFast.from_pretrained(model_name, add_eos_token=True, from_slow=True)
 
 # This is the fix for fp16 training
 tokenizer.padding_side = "right"
@@ -213,6 +213,7 @@ We are going to use our dataset of literary analysis of public domain novels as 
 
 from datasets import load_dataset
 
+
 def format_custom(sample):
     instruction = f"<s>Text: {sample['full_text']} \n\n### Analysis:\n\n"
     context = None
@@ -221,16 +222,18 @@ def format_custom(sample):
     prompt = "".join([i for i in [instruction, context, response] if i is not None])
     return prompt
 
+
 # template dataset to add prompt to each sample
 def template_dataset(sample):
     sample["text"] = f"{format_custom(sample)}{tokenizer.eos_token}"
     return sample
 
+
 # Loadng the dataset.
 data_files = {"train": "brahe_instructions.json"}
 dataset = load_dataset("json", data_files=data_files, split="train")
 
-#Transformation du dataset pour utiliser le format guanaco
+# Transformation du dataset pour utiliser le format guanaco
 dataset = dataset.map(template_dataset, remove_columns=list(dataset.features))
 dataset
 
@@ -260,7 +263,7 @@ training_arguments = TrainingArguments(
     warmup_ratio=warmup_ratio,
     group_by_length=group_by_length,
     lr_scheduler_type=lr_scheduler_type,
-    report_to="tensorboard"
+    report_to="tensorboard",
 )
 
 trainer = SFTTrainer(
@@ -271,15 +274,17 @@ trainer = SFTTrainer(
     max_seq_length=max_seq_length,
     tokenizer=tokenizer,
     args=training_arguments,
-    packing=packing
+    packing=packing,
 )
 
-#trainer.train()
+# trainer.train()
 trainer.train(resume_from_checkpoint=True)
 
 """We save the model"""
 
-model_to_save = trainer.model.module if hasattr(trainer.model, 'module') else trainer.model  # Take care of distributed/parallel training
+model_to_save = (
+    trainer.model.module if hasattr(trainer.model, "module") else trainer.model
+)  # Take care of distributed/parallel training
 model_to_save.save_pretrained(new_model_name)
 
 """We merge the model and the LORA to get inference speed up."""
@@ -289,7 +294,9 @@ torch.cuda.empty_cache()
 
 from peft import AutoPeftModelForCausalLM
 
-model = AutoPeftModelForCausalLM.from_pretrained(new_model_name, device_map="auto", torch_dtype=torch.bfloat16)
+model = AutoPeftModelForCausalLM.from_pretrained(
+    new_model_name, device_map="auto", torch_dtype=torch.bfloat16
+)
 model = model.merge_and_unload()
 
 output_merged_dir = os.path.join(new_model_name, "final_merged_checkpoint")
@@ -310,7 +317,6 @@ To do later: not working for now (but you're free to debug). You may need to del
 # !pip install git+https://github.com/huggingface/transformers.git
 
 # !pip install git+https://github.com/vllm-project/vllm
-
 
 
 # from vllm import LLM, SamplingParams
