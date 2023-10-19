@@ -28,6 +28,12 @@ While it's possible to do it straight with the huggingface import functions, as 
 !wget https://huggingface.co/mistralai/Mistral-7B-v0.1/resolve/main/tokenizer.model
 !wget https://huggingface.co/mistralai/Mistral-7B-v0.1/resolve/main/tokenizer_config.json
 !wget https://huggingface.co/mistralai/Mistral-7B-v0.1/resolve/main/pytorch_model.bin.index.json
+# !pip install git+https://github.com/huggingface/transformers.git
+# !pip install git+https://github.com/huggingface/peft.git
+# !pip install -q accelerate bitsandbytes trl guardrail-ml tensorboard
+# !apt-get -qq install poppler-utils tesseract-ocr
+# !pip install -q unstructured["local-inference"] pillow
+
 """
 # %cd ".."
 
@@ -37,16 +43,6 @@ We connect to the drive
 
 We install transformers and peft separately from the latest version on Github. Otherwhise, you will miss key metadata for Mistral support.
 """
-
-# !pip install git+https://github.com/huggingface/transformers.git
-# !pip install git+https://github.com/huggingface/peft.git
-
-# """We install the other extensions."""
-
-# !pip install -q accelerate bitsandbytes trl guardrail-ml tensorboard
-# !apt-get -qq install poppler-utils tesseract-ocr
-# !pip install -q unstructured["local-inference"] pillow
-
 """We load the libraries"""
 
 import os
