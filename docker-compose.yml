@@ -7,3 +7,10 @@ services:
     volumes:
       - .:/workspace
     command: [ "accelerate", "launch", "train.py" ]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
