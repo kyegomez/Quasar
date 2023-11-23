@@ -7,9 +7,11 @@ WORKDIR /workspace
 # Update system packages and install necessary dependencies
 RUN apt-get update && \
     apt-get install -y python3-pip python3-packaging git ninja-build && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    pip3 install --upgrade pip
+    # Install Accelerate and bitsandbytes
+    pip3 install --upgrade pip && \
+    pip3 install accelerate && \
+    pip3 install -i https://test.pypi.org/simple/ bitsandbytes && \
+    rm -rf /var/lib/apt/lists/*
 
 # Specify supported CUDA architectures for PyTorch (adjust if necessary)
 ENV TORCH_CUDA_ARCH_LIST="7.0;7.2;7.5;8.0;8.6;8.9;9.0"
@@ -22,7 +24,7 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy the default accelerate config and training script
-COPY default_accelerate_config.yml /root/.cache/torch/accelerate/default_config.yaml
+COPY default_accelerate_config.yaml /root/.cache/torch/accelerate/default_config.yaml
 COPY train.py .
 
 # Use accelerate launch to run the training script
